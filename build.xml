@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="AntProject" default="main" basedir=".">
+<description>
+    Auto-building project.
+</description>
+
+<!--
+
+This is the class that contains your main() method. Replace the default
+value of "HelloWorld" with whatever you called this class. If the class
+resides within a package (it isn't directly under the "src" directory)
+then include the package name and separate them with a forward slash
+("/"). For example: "coolpackage/MyMainClass".
+
+-->
+<property name="mainClass" value="HelloWorld" />
+
+<!-- Java sources -->
+<property name="src.dir" location="src" />
+
+<!-- Java classes -->
+<property name="build.dir" location="bin" />
+
+<!-- Output, Jar -->
+<property name="dist.dir" location="dist" />
+ 
+<target name="main" depends="clean, build, dist" />
+
+<target name="init">
+    <mkdir dir="${build.dir}" />
+</target>
+ 
+<target name="build" depends="init" description="build the source ">
+    <javac includeantruntime="false" srcdir="${src.dir}" destdir="${build.dir}" />
+</target>
+ 
+<target name="clean" description="delete the build and dist directories">
+    <delete dir="${build.dir}" />   
+    <delete dir="${dist.dir}" />   
+</target>
+ 
+<target name="dist" depends="build" description="package, output to JAR">
+    <mkdir dir="${dist.dir}" />
+ 
+    <jar jarfile="${dist.dir}/app.jar" basedir="${build.dir}" >
+        <manifest>
+            <attribute name="Main-Class" value="${mainClass}" />
+        </manifest>
+    </jar>
+</target>
+
+<target name="run" depends="dist" description="run the program">
+    <exec executable="java">
+        <arg value="-jar" />
+        <arg value="${dist.dir}/app.jar" />
+    </exec>
+</target>
+</project>
